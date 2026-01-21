@@ -38,10 +38,12 @@ class CameraWorker:
     def run(self):
         bus = PyCapture2.BusManager()
         cam = PyCapture2.Camera()
-        enable_embedded_timestamp(cam, True)
+        
 
         try:
             cam.connect(bus.getCameraFromIndex(self.cam_index))
+
+            enable_embedded_timestamp(cam, True)
             
             # Configure Software Trigger
             trigger_mode = cam.getTriggerMode()
@@ -70,7 +72,7 @@ class CameraWorker:
                 try:
                     image = cam.retrieveBuffer()
                     # Success logic here
-                    print(f"[Cam {self.cam_index}] Captured image with timestamp: {image.getTimeStamp()}")
+                    print(f"[Cam {self.cam_index}] Captured image with timestamp: {image.getTimeStamp().cycleCount}")
                 except PyCapture2.Fc2error as e:
                     print(f"[Cam {self.cam_index}] Capture Error: {e}")
 
