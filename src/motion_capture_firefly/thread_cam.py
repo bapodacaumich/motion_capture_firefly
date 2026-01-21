@@ -70,6 +70,7 @@ class CameraWorker:
                 try:
                     image = cam.retrieveBuffer()
                     # Success logic here
+                    print(f"[Cam {self.cam_index}] Captured image with timestamp: {image.getTimeStamp()}")
                 except PyCapture2.Fc2error as e:
                     print(f"[Cam {self.cam_index}] Capture Error: {e}")
 
