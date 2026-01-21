@@ -19,6 +19,16 @@ def poll_for_trigger_ready(cam):
             break
         time.sleep(0.001) # Small sleep to prevent CPU hogging
 
+def enable_embedded_timestamp(cam, enable_timestamp):
+    embedded_info = cam.getEmbeddedImageInfo()
+    if embedded_info.available.timestamp:
+        cam.setEmbeddedImageInfo(timestamp = enable_timestamp)
+        if enable_timestamp :
+            print('\nTimeStamp is enabled.\n')
+        else:
+            print('\nTimeStamp is disabled.\n')
+
+
 class CameraWorker:
     def __init__(self, cam_index, barrier, stop_event):
         self.cam_index = cam_index
@@ -28,7 +38,8 @@ class CameraWorker:
     def run(self):
         bus = PyCapture2.BusManager()
         cam = PyCapture2.Camera()
-        
+        enable_embedded_timestamp(cam, True)
+
         try:
             cam.connect(bus.getCameraFromIndex(self.cam_index))
             
